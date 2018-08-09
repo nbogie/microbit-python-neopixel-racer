@@ -17,6 +17,9 @@ let winnerId = 0
 let p1Hue = 0
 let p2Hue = 0
 let raceState = ""
+let trafficLightColour = 0
+
+
 function showPlayer2()  {
     strip2.setBrightness(defaultBrightness)
     strip2.clear()
@@ -248,7 +251,8 @@ function winRace()  {
     raceDuration = input.runningTime() - raceStartTime
     runEndOfRaceAnims()
 }
-let trafficLightColour = 0
+
+
 raceState = "uninit"
 radio.setGroup(21)
 movementStep = 1
