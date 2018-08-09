@@ -18,7 +18,7 @@ def off():
     return None
 
 
-def config(stuff):
+def config(group = 1):
     pass
 
 
