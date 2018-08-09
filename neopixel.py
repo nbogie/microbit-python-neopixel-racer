@@ -14,6 +14,8 @@ class NeoPixel:
     def clear(self):
         pass
 
+    def __setitem__(self, ix, color): self.buffer[ix] = color
+
 
 
 
