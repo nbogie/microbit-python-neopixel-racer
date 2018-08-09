@@ -117,6 +117,9 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.color.WHEAT)
         self.set_update_rate(1 / 50)
+        self.test_colour = arcade.color.BABY_BLUE
+        self.hue = 0.0
+
 
     def setup(self):
         # Create your sprites and sprite lists here
@@ -125,6 +128,8 @@ class MyGame(arcade.Window):
     def draw_pixels(self, pixels, y):
         num_pixels = pixels.num_pixels()
         x_step = 800 / num_pixels
+
+        arcade.draw_circle_filled(20, 20, 100, self.test_colour)
 
         x = x_step / 2
         for i in range(num_pixels):
@@ -143,6 +148,7 @@ class MyGame(arcade.Window):
         arcade.start_render()
         self.draw_pixels(self.sim1, 250)
         self.draw_pixels(self.sim2, 200)
+
 
     # Call draw() on all your sprite lists below
 
@@ -181,7 +187,10 @@ class MyGame(arcade.Window):
         pass
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
-        pass
+        self.hue += 0.01
+        if self.hue >= 1.0:
+            self.hue = self.hue - 1.0
+        self.test_colour = ColorUtils.hsv_to_rgb_256(self.hue, 1, 1)
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         pass
