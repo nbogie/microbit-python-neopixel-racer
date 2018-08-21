@@ -51,6 +51,7 @@ class Game:
         self.dirty = [False, False]
         self.state = Game.STATE_STARTING
         self.winner_ix = 10
+        self.clear_strips()
 
     def create_pixel_strips(self, num):
         #pin 13 for bit commander
@@ -99,7 +100,7 @@ class Game:
     def advance_player(self, ix):
         if self.state == Game.STATE_RACING:
             self.players[ix].move_forward()
-            radio.send('p1pressed' if ix == 0 else 'p2pressed')
+            radio.send('p1moved' if ix == 0 else 'p2moved')
 
             if self.players[ix].is_finished():
                 self.win_race(ix)
@@ -157,6 +158,6 @@ class Game:
 radio.on()
 radio.config(group=21)
 radio.send('init')
-display.scroll("pyrace ch22", 50)
 game = Game()
+display.scroll("pyrace ch21", 50)
 game.game_loop()
