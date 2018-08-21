@@ -1,10 +1,11 @@
 from microbit import *
 import radio
 
-radio.config(group=22)
+radio.config(group=21)
 radio.on()
-
+display.scroll('tx pyrace', 50)
 count = 0
+
 while True:
     if accelerometer.was_gesture("shake"):
         radio.send("start")
