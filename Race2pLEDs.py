@@ -45,7 +45,7 @@ class Game:
 
     def __init__(self):
         self.button_pins = [pin12, pin15, pin14, pin16]
-        self.num_pixels = 60
+        self.num_pixels = 59
         self.strips = self.create_pixel_strips(self.num_pixels)
         self.players = [Player(RED, self.num_pixels - 1), Player(BLUE, self.num_pixels - 1)]
         self.game_over = False
@@ -60,7 +60,7 @@ class Game:
     def strip_show_colour(self, strip, colour):
         for i in range(self.num_pixels):
             strip[i] = colour
-            strip.show()
+        strip.show()
 
     def clear_strips(self):
         for s in self.strips:
@@ -70,10 +70,10 @@ class Game:
     def start_race(self):
         self.state = Game.STATE_LIGHTS
         for (c, msg) in [(RED, "red"), (ORANGE, "amber"), (GREEN, "green")]:
+            radio.send(msg)
             for s in self.strips:
-                radio.send(msg)
                 self.strip_show_colour(s, c)
-                sleep(500)
+            sleep(500)
         self.clear_strips()
 
         self.state = Game.STATE_RACING
@@ -112,13 +112,15 @@ class Game:
 
         if self.state == Game.STATE_STARTING:
             if button_a.is_pressed():
-                self.spin_player_colour(0)
+                # self.spin_player_colour(0)
+                self.start_race()
+
             if button_b.is_pressed():
                 self.spin_player_colour(1)
         else:
-            if pin16.read_digital():
+            if pin16.read_digital() or button_a.is_pressed():
                 self.advance_player(0)
-            if pin15.read_digital():
+            if pin15.read_digital() or button_b.is_pressed():
                 self.advance_player(1)
 
     def update(self):
