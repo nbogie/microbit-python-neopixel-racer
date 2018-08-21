@@ -44,7 +44,6 @@ class Game:
     STATE_RACING = 'racing'
 
     def __init__(self):
-        self.button_pins = [pin12, pin15, pin14, pin16]
         self.num_pixels = 59
         self.strips = self.create_pixel_strips(self.num_pixels)
         self.players = [Player(RED, self.num_pixels - 1), Player(BLUE, self.num_pixels - 1)]
@@ -69,7 +68,7 @@ class Game:
 
     def start_race(self):
         self.state = Game.STATE_LIGHTS
-        for (c, msg) in [(RED, "red"), (ORANGE, "amber"), (GREEN, "green")]:
+        for (c, msg) in [(RED, 'red'), (ORANGE, 'amber'), (GREEN, 'green')]:
             radio.send(msg)
             for s in self.strips:
                 self.strip_show_colour(s, c)
@@ -77,6 +76,7 @@ class Game:
         self.clear_strips()
 
         self.state = Game.STATE_RACING
+        radio.send('go')
 
     def handle_radio_inputs(self):
         incoming = radio.receive()
@@ -99,6 +99,8 @@ class Game:
     def advance_player(self, ix):
         if self.state == Game.STATE_RACING:
             self.players[ix].move_forward()
+            radio.send('p1pressed' if ix == 0 else 'p2pressed')
+
             if self.players[ix].is_finished():
                 self.win_race(ix)
             self.dirty[ix] = True
@@ -118,9 +120,9 @@ class Game:
             if button_b.is_pressed():
                 self.spin_player_colour(1)
         else:
-            if pin16.read_digital() or button_a.is_pressed():
+            if button_a.was_pressed():
                 self.advance_player(0)
-            if pin15.read_digital() or button_b.is_pressed():
+            if button_b.was_pressed():
                 self.advance_player(1)
 
     def update(self):
@@ -153,8 +155,8 @@ class Game:
 
 
 radio.on()
-radio.config(group=22)
-radio.send('i_am_awake')
+radio.config(group=21)
+radio.send('init')
 display.scroll("pyrace ch22", 50)
 game = Game()
 game.game_loop()
