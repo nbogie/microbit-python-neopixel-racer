@@ -1,11 +1,15 @@
 from microbit import *
 import radio
 import random
+import music
+
+
 
 def handle_radio_inputs():
     incoming = radio.receive()
     if incoming == 'init':
         display.show(':')
+        music.play(music.JUMP_UP)
     if incoming == 'soon':
         display.show('s')
     if incoming == 'red':
@@ -16,14 +20,19 @@ def handle_radio_inputs():
         display.show('g')
     if incoming == 'go':
         display.show('!')
-    if incoming == 'p1pressed':
+        music.play(music.BA_DING)
+    if incoming == 'p1moved':
         display.show('<')
-    if incoming == 'p2pressed':
+        music.pitch(660, 30)
+    if incoming == 'p2moved':
         display.show('>')
+        music.pitch(440, 30)
     if incoming == 'p1won':
         display.show('1')
+        music.play(music.POWER_UP)
     if incoming == 'p2won':
         display.show('2')
+        music.play(music.PYTHON)
 
 radio.on()
 radio.config(group=21)
