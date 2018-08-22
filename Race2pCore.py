@@ -1,15 +1,19 @@
 from microbit import *
 import neopixel
 import radio
-import random
 
 RED = (64, 0, 0)
 GREEN = (0, 64, 0)
 BLUE = (0, 0, 64)
-YELLOW = (64, 24, 0)
-ORANGE = (64, 64, 0)
-off = (0, 0, 0)
-colours = [RED, ORANGE, GREEN, BLUE, YELLOW]
+AMBER = (64, 64, 0)
+
+
+def less(v):
+    return max(0, v-20)
+
+
+def softer(c):
+    return tuple(map(less, c))
 
 
 class Player:
@@ -22,9 +26,10 @@ class Player:
 
     def draw(self, pixels):
         pixels[self.pos] = self.colour
-
-    def cycle_colour(self):
-        self.colour = random.choice(colours)
+        if self.pos > 1:
+            pixels[self.pos - 1] = softer(self.colour)
+        if self.pos > 2:
+            pixels[self.pos - 2] = softer(self.colour)
 
     def move_forward(self):
         if not self.finished:
@@ -54,7 +59,6 @@ class Game:
         self.clear_strips()
 
     def create_pixel_strips(self, num):
-        #pin 13 for bit commander
         return [neopixel.NeoPixel(pin0, num), neopixel.NeoPixel(pin1, num)]
 
     def strip_show_colour(self, strip, colour):
@@ -69,11 +73,11 @@ class Game:
 
     def start_race(self):
         self.state = Game.STATE_LIGHTS
-        for (c, msg) in [(RED, 'red'), (ORANGE, 'amber'), (GREEN, 'green')]:
+        for (c, msg) in [(RED, 'red'), (AMBER, 'amber'), (GREEN, 'green')]:
             radio.send(msg)
             for s in self.strips:
                 self.strip_show_colour(s, c)
-            sleep(500)
+            sleep(1000)
         self.clear_strips()
 
         self.state = Game.STATE_RACING
@@ -94,7 +98,6 @@ class Game:
     def win_race(self, ix):
         self.winner_ix = ix
         radio.send("p1won" if ix == 0 else "p2won")
-        # TODO: animate win by player colour
         self.state = Game.STATE_FINISHED
 
     def advance_player(self, ix):
@@ -106,20 +109,12 @@ class Game:
                 self.win_race(ix)
             self.dirty[ix] = True
 
-    def spin_player_colour(self, ix):
-        self.players[ix].cycle_colour()
-        self.dirty[ix] = True
-
     def handle_inputs(self):
         self.handle_radio_inputs()
 
         if self.state == Game.STATE_STARTING:
             if button_a.is_pressed():
-                # self.spin_player_colour(0)
                 self.start_race()
-
-            if button_b.is_pressed():
-                self.spin_player_colour(1)
         else:
             if button_a.was_pressed():
                 self.advance_player(0)
@@ -143,7 +138,7 @@ class Game:
             for i in range(2):
                 if self.dirty[i]:
                     self.strips[i].clear()
-                    # TODO: check strip is passed by reference
+                    # TODO: passed by ref?
                     self.players[i].draw(self.strips[i])
                     self.dirty[i] = False
 
@@ -159,5 +154,5 @@ radio.on()
 radio.config(group=21)
 radio.send('init')
 game = Game()
-display.scroll("pyrace ch21", 50)
+display.scroll("pyrace:21", 50)
 game.game_loop()
