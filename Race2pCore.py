@@ -9,7 +9,7 @@ AMBER = (64, 64, 0)
 
 
 def less(v):
-    return max(0, v-20)
+    return max(0, v-29)
 
 
 def softer(c):
@@ -29,7 +29,7 @@ class Player:
         if self.pos > 1:
             pixels[self.pos - 1] = softer(self.colour)
         if self.pos > 2:
-            pixels[self.pos - 2] = softer(self.colour)
+            pixels[self.pos - 2] = softer(softer(self.colour))
 
     def move_forward(self):
         if not self.finished:
