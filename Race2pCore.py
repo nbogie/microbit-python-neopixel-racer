@@ -43,10 +43,10 @@ class Player:
 
 
 class Game:
-    STATE_FINISHED = 'finished'
-    STATE_STARTING = 'starting'
-    STATE_LIGHTS = 'lights'
-    STATE_RACING = 'racing'
+    STATE_FINISHED = 'f'
+    STATE_STARTING = 's'
+    STATE_LIGHTS = 'l'
+    STATE_RACING = 'r'
 
     def __init__(self):
         self.num_pixels = 59
@@ -95,19 +95,22 @@ class Game:
         if incoming == 'b':
             self.advance_player(1)
 
-    def win_race(self, ix):
-        self.winner_ix = ix
-        radio.send("p1won" if ix == 0 else "p2won")
-        self.state = Game.STATE_FINISHED
-
     def advance_player(self, ix):
         if self.state == Game.STATE_RACING:
             self.players[ix].move_forward()
             radio.send('p1moved' if ix == 0 else 'p2moved')
-
             if self.players[ix].is_finished():
-                self.win_race(ix)
+                self.winner_ix = ix
+                self.state = Game.STATE_FINISHED
+                radio.send("p1won" if ix == 0 else "p2won")
+                for i in range(4):
+                    for s in self.strips:
+                        self.strip_show_colour(s, self.players[ix].colour)
+                    sleep(200)
+                    self.clear_strips()
+                    sleep(200)
             self.dirty[ix] = True
+            self.state = Game.STATE_STARTING
 
     def handle_inputs(self):
         self.handle_radio_inputs()
@@ -124,16 +127,9 @@ class Game:
     def update(self):
         self.handle_inputs()
 
-    def draw_game_over(self):
-        for s in self.strips:
-            s[1] = RED
-            s[2] = GREEN
-            s[3] = BLUE
-            s.show()
-
     def redraw_dirty(self):
         if self.state == Game.STATE_FINISHED:
-            self.draw_game_over()
+            pass
         else:
             for i in range(2):
                 if self.dirty[i]:
