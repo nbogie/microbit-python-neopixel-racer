@@ -24,6 +24,10 @@ class Player:
         self.max_pos = max_pos
         self.finished = False
 
+    def reset(self):
+        self.pos = 0
+        self.finished = False
+
     def draw(self, pixels):
         pixels[self.pos] = self.colour
         if self.pos > 1:
@@ -52,10 +56,8 @@ class Game:
         self.num_pixels = 59
         self.strips = self.create_pixel_strips(self.num_pixels)
         self.players = [Player(RED, self.num_pixels - 1), Player(BLUE, self.num_pixels - 1)]
-        self.game_over = False
         self.dirty = [False, False]
         self.state = Game.STATE_STARTING
-        self.winner_ix = 10
         self.clear_strips()
 
     def create_pixel_strips(self, num):
@@ -100,7 +102,6 @@ class Game:
             self.players[ix].move_forward()
             radio.send('p1moved' if ix == 0 else 'p2moved')
             if self.players[ix].is_finished():
-                self.winner_ix = ix
                 self.state = Game.STATE_FINISHED
                 radio.send("p1won" if ix == 0 else "p2won")
                 for i in range(4):
@@ -109,8 +110,10 @@ class Game:
                     sleep(200)
                     self.clear_strips()
                     sleep(200)
+                self.state = Game.STATE_STARTING
+                for p in self.players:
+                    p.reset()
             self.dirty[ix] = True
-            self.state = Game.STATE_STARTING
 
     def handle_inputs(self):
         self.handle_radio_inputs()
@@ -134,7 +137,6 @@ class Game:
             for i in range(2):
                 if self.dirty[i]:
                     self.strips[i].clear()
-                    # TODO: passed by ref?
                     self.players[i].draw(self.strips[i])
                     self.dirty[i] = False
 
