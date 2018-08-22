@@ -79,9 +79,9 @@ class Game:
                 self.strip_show_colour(s, c)
             sleep(1000)
         self.clear_strips()
-
         self.state = Game.STATE_RACING
         radio.send('go')
+        self.dirty = [True, True]
 
     def handle_radio_inputs(self):
         incoming = radio.receive()
