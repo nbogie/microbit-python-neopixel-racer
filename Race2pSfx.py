@@ -1,8 +1,6 @@
 from microbit import *
 import radio
-import random
 import music
-
 
 
 def handle_radio_inputs():
@@ -36,6 +34,7 @@ def handle_radio_inputs():
     if incoming == 'p2won':
         display.show('2')
         music.play(music.JUMP_DOWN)
+
 
 radio.on()
 radio.config(group=21)
