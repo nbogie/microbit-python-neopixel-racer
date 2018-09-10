@@ -2,11 +2,11 @@ from microbit import *
 import neopixel
 import radio
 
-RED = (64, 0, 0)
-GREEN = (0, 64, 0)
-BLUE = (0, 0, 64)
-AMBER = (64, 64, 0)
-
+L=150
+RED = (L, 0, 0)
+GREEN = (0, L, 0)
+BLUE = (0, 0, L)
+AMBER = (L, L, 0)
 
 def less(v):
     return max(0, v-29)
@@ -63,8 +63,8 @@ class Game:
     def create_pixel_strips(self, num):
         return [neopixel.NeoPixel(pin0, num), neopixel.NeoPixel(pin1, num)]
 
-    def strip_show_colour(self, strip, colour):
-        for i in range(self.num_pixels):
+    def strip_show_colour(self, strip, colour, maxPxl=59):
+        for i in range(min(self.num_pixels, maxPxl)):
             strip[i] = colour
         strip.show()
 
@@ -78,7 +78,7 @@ class Game:
         for (c, msg) in [(RED, 'red'), (AMBER, 'amber'), (GREEN, 'green')]:
             radio.send(msg)
             for s in self.strips:
-                self.strip_show_colour(s, c)
+                self.strip_show_colour(s, c, 20)
             sleep(1000)
         self.clear_strips()
         self.state = Game.STATE_RACING
@@ -147,10 +147,10 @@ class Game:
             self.update()
             self.redraw_dirty()
 
-
 radio.on()
 radio.config(group=21)
 radio.send('init')
 game = Game()
-display.scroll("pyrace:21", 50)
+display.scroll("core:21  ", 50)
+display.scroll(L, 50)
 game.game_loop()
