@@ -12,7 +12,7 @@ def player2WinWiggle():
 def processMsg(msg):
     if (msg == "init"):
         preGameWiggle()
-    elif (msg == "soon"):
+    elif (msg == "red"):
         pin1.write_analog(90)
     elif (msg == "p1lead"):
         pin1.write_analog(135)
@@ -20,9 +20,9 @@ def processMsg(msg):
         pin1.write_analog(45)
     elif (msg == "tied"):
         pin1.write_analog(90)
-    elif (msg == "p1win"):
+    elif (msg == "p1won"):
         player1WinWiggle()
-    elif (msg == "p2win"):
+    elif (msg == "p2won"):
         player2WinWiggle()
 
 def toggleMarkerPixel():

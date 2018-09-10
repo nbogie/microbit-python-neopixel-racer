@@ -110,9 +110,19 @@ class Game:
                     sleep(200)
                     self.clear_strips()
                     sleep(200)
+                sleep(3000)
                 self.state = Game.STATE_STARTING
                 for p in self.players:
                     p.reset()
+            else:
+                if self.players[0].pos > self.players[1].pos:
+                    radio.send("p1lead")
+                elif self.players[0].pos < self.players[1].pos:
+                    radio.send("p2lead")
+                else:
+                    radio.send("tied")
+                    
+                
             self.dirty[ix] = True
 
     def handle_inputs(self):
