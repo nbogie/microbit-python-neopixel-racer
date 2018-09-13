@@ -7,10 +7,13 @@ Here are some resources from the PyCon UK 2018 Young Coders Day workshop called
 ## Find out more!
 
 Radio docs
-* https://microbit-micropython.readthedocs.io/en/latest/radio.html
+* [Radio API docs](https://microbit-micropython.readthedocs.io/en/latest/radio.html)... 
+and [radio utorial](https://microbit-micropython.readthedocs.io/en/latest/tutorials/radio.html)
 
 Music docs
-* https://microbit-micropython.readthedocs.io/en/latest/music.html
+* [Music API docs](https://microbit-micropython.readthedocs.io/en/latest/music.html)... 
+and [music tutorial](https://microbit-micropython.readthedocs.io/en/latest/tutorials/music.html)
 
 Text-to-Speech docs
- * https://microbit-micropython.readthedocs.io/en/latest/tutorials/speech.html
+ * [Text-to-Speech API docs](https://microbit-micropython.readthedocs.io/en/latest/tutorials/speech.html)... 
+ and [Text-to-Speech tutorial](https://microbit-micropython.readthedocs.io/en/latest/tutorials/speech.html)
