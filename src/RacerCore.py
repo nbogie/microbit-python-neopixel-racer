@@ -2,7 +2,7 @@ from microbit import *
 import neopixel
 import radio
 
-L=150
+L = 150
 RED = (L, 0, 0)
 GREEN = (0, L, 0)
 BLUE = (0, 0, L)
@@ -24,7 +24,7 @@ class Player:
         self.max_pos = max_pos
         self.finished = False
 
-    def reset(self):
+    def resetMe(self):
         self.pos = 0
         self.finished = False
 
@@ -55,7 +55,8 @@ class Game:
     def __init__(self):
         self.num_pixels = 59
         self.strips = self.create_pixel_strips(self.num_pixels)
-        self.players = [Player(RED, self.num_pixels - 1), Player(BLUE, self.num_pixels - 1)]
+        self.players = [Player(RED, self.num_pixels - 1), 
+                        Player(BLUE, self.num_pixels - 1)]
         self.dirty = [False, False]
         self.state = Game.STATE_STARTING
         self.clear_strips()
@@ -113,7 +114,7 @@ class Game:
                 sleep(3000)
                 self.state = Game.STATE_STARTING
                 for p in self.players:
-                    p.reset()
+                    p.resetMe()
             else:
                 if self.players[0].pos > self.players[1].pos:
                     radio.send("p1lead")
@@ -121,8 +122,6 @@ class Game:
                     radio.send("p2lead")
                 else:
                     radio.send("tied")
-                    
-                
             self.dirty[ix] = True
 
     def handle_inputs(self):
@@ -161,6 +160,6 @@ radio.on()
 radio.config(group=21)
 radio.send('init')
 game = Game()
-display.scroll("core:21  ", 50)
-display.scroll(L, 50)
+display.scroll("Core CH21 B", 40)
+display.scroll(L, 40)
 game.game_loop()
