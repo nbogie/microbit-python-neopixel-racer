@@ -9,7 +9,7 @@ BLUE = (0, 0, L)
 AMBER = (L, L, 0)
 
 def less(v):
-    return max(0, v-29)
+    return max(0, v - 60)
 
 
 def softer(c):
