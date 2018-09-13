@@ -2,14 +2,17 @@ from microbit import *
 import radio
 import music
 
+WIN_SONG_2 = ['E5:2', 'R:4', 'G:2', 'R:4', 'E:2', 'R:2', 
+              'E:2',  'R:4', 'G:2', 'R:4', 'E:2', 'R:2', 
+              'E:2',  'R:4', 'G:2', 'R:4', 'E:2', 'R:2',                 
+              'F#:2', 'R:4', 'E:2', 'R:4', 'D:2', 'R:2']
+            
 
 def handle_radio_inputs():
     incoming = radio.receive()
     if incoming == 'init':
         display.show(':')
         music.play(music.JUMP_UP)
-    if incoming == 'soon':
-        display.show('s')
     if incoming == 'red':
         music.pitch(880, 30)
         display.show('r')
@@ -33,7 +36,7 @@ def handle_radio_inputs():
         music.play(music.POWER_UP)
     if incoming == 'p2won':
         display.show('2')
-        music.play(music.JUMP_DOWN)
+        music.play(WIN_SONG_2)        
 
 
 radio.on()
