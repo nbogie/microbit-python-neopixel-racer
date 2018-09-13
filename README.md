@@ -10,8 +10,18 @@ Optionally install the following, for full system demo, but ideally have the stu
 * install sample servo "position indicator" onto a microbit with a servo on pin 1.
 
 ## Issues:
-* The micro:bit is running out of memory with what i'd like to implement, even with Mu's "minify before flashing" micro:bit setting.  So some features from the original have been thrown overboard (such as user-chosen colours and fancier animations).
+
+What's more difficult about the MicroPython implementation than the MakeCode / Javascript one?
+
+* Less space for code.  The micro:bit is running out of memory with what i'd like to implement, even with Mu's "minify before flashing" micro:bit setting.  So some features from the original have been thrown overboard (such as user-chosen colours and fancier animations).
 * max depth of around 8 nested calls: https://mail.python.org/pipermail/microbit/2016-February/000896.html
+* There's no RGBW neopixel support (my existing hardware was RGBW, which is supported in makecode/javascript).
+* There's no simulator
+
+Pros:
+
+* REPL
+* The students get to use (Micro)Python
 
 ## misc resources
 
