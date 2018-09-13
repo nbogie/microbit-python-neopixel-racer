@@ -28,7 +28,7 @@ def player1WinWiggle():
     wiggleBetween(175, 115, 4)
 
 def player2WinWiggle():
-    wiggleBetween(45, 5, 4)
+    wiggleBetween(75, 25, 4)
 
 
 def preGameWiggle():
